@@ -18,6 +18,9 @@ const userSchema = mongoose.Schema({
   firstName: {
     type: String,
   },
+  lastName: {
+    type: String,
+  },
   creditBalance: {
     type: Number,
     default: 5,

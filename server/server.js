@@ -1,20 +1,22 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import connectDB from "./configs/mongodb.js";
-//
+import connectDB from "./configs/db.js";
+import userRouter from "./routes/userRoutes.js";
 
-const PORT = process.env.PORT || 4000;
 const app = express();
+connectDB();
 
-app.use(express.json());
 app.use(cors());
-await connectDB();
+app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("API Working");
+  res.send("BG Removal API Running 🚀");
 });
+app.use("/api/users", userRouter);
+
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
