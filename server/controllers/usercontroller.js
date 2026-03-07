@@ -5,13 +5,17 @@ export const ClerkWebHooks = async (req, res) => {
   try {
     const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-    await webhook.verify(JSON.stringify(req.body), {
+    const payload = req.body.toString(); // convert buffer to string
+
+    const evt = await webhook.verify(payload, {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"],
     });
 
-    const { data, type } = req.body;
+    const { data, type } = evt;
+
+    console.log("Webhook event:", type);
 
     switch (type) {
       case "user.created":
@@ -30,40 +34,29 @@ export const ClerkWebHooks = async (req, res) => {
         break;
 
       case "user.updated":
-        const updatedData = {
-          email: data.email_addresses[0].email_address,
-          firstName: data.first_name,
-          lastName: data.last_name,
-          photo: data.image_url,
-        };
-
-        await userModel.findOneAndUpdate({ clerkId: data.id }, updatedData);
+        await userModel.findOneAndUpdate(
+          { clerkId: data.id },
+          {
+            email: data.email_addresses[0].email_address,
+            firstName: data.first_name,
+            lastName: data.last_name,
+            photo: data.image_url,
+          },
+        );
 
         console.log("User Updated");
-
         break;
 
       case "user.deleted":
-        await userModel.findOneAndDelete({
-          clerkId: data.id,
-        });
-
+        await userModel.findOneAndDelete({ clerkId: data.id });
         console.log("User Deleted");
-
         break;
-
-      default:
-        console.log("Event not handled");
     }
 
     res.json({ success: true });
   } catch (error) {
-    console.log(error.message);
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    console.log("Webhook Error:", error.message);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
