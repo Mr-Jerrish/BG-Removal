@@ -1,8 +1,9 @@
-import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+
 import connectDB from "./configs/db.js";
-import userRouter from "./routes/userRoutes.js";
+import webhookRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -10,19 +11,14 @@ const app = express();
 
 app.use(cors());
 
-// webhook needs raw body
-app.use("/api/user/webhook", express.raw({ type: "application/json" }));
-
-// other APIs
-app.use(express.json());
-
 connectDB();
 
-app.get("/", (req, res) => {
-  res.send("BG Removal API Running 🚀");
-});
+// Clerk webhook route
+app.use("/api/webhook", webhookRoutes);
 
-app.use("/api/user", userRouter);
+app.get("/", (req, res) => {
+  res.send("API Working 🚀");
+});
 
 const PORT = process.env.PORT || 5000;
 

@@ -1,21 +1,20 @@
 import { Webhook } from "svix";
-import userModel from "../models/userModel.js";
+import User from "../models/userModel.js";
 
-export const ClerkWebHooks = async (req, res) => {
+const clerkWebhook = async (req, res) => {
   try {
-    const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+    const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-    const payload = req.body.toString();
+    const payload = req.body;
+    const headers = req.headers;
 
-    const evt = await webhook.verify(payload, {
-      "svix-id": req.headers["svix-id"],
-      "svix-timestamp": req.headers["svix-timestamp"],
-      "svix-signature": req.headers["svix-signature"],
+    const evt = wh.verify(payload, {
+      "svix-id": headers["svix-id"],
+      "svix-timestamp": headers["svix-timestamp"],
+      "svix-signature": headers["svix-signature"],
     });
 
     const { data, type } = evt;
-
-    console.log("Webhook Event:", type);
 
     if (type === "user.created") {
       const userData = {
@@ -26,56 +25,16 @@ export const ClerkWebHooks = async (req, res) => {
         photo: data.image_url,
       };
 
-      await userModel.create(userData);
+      await User.create(userData);
 
-      console.log("User saved in MongoDB");
-    }
-
-    if (type === "user.updated") {
-      await userModel.findOneAndUpdate(
-        { clerkId: data.id },
-        {
-          email: data.email_addresses[0].email_address,
-          firstName: data.first_name,
-          lastName: data.last_name,
-          photo: data.image_url,
-        },
-      );
-
-      console.log("User Updated");
-    }
-
-    if (type === "user.deleted") {
-      await userModel.findOneAndDelete({ clerkId: data.id });
-
-      console.log("User Deleted");
+      console.log("User Saved to DB ✅");
     }
 
     res.json({ success: true });
   } catch (error) {
-    console.log("Webhook Error:", error.message);
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    console.log(error);
+    res.json({ success: false });
   }
 };
 
-export const userCredits = async (req, res) => {
-  try {
-    const { clerkId } = req.body;
-
-    const userData = await userModel.findOne({ clerkId });
-
-    res.json({
-      success: true,
-      credits: userData.credit,
-    });
-  } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+export default clerkWebhook;
