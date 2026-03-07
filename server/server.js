@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import connectDB from "./configs/db.js";
-import webhookRoutes from "./routes/userRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -14,7 +14,7 @@ app.use(cors());
 connectDB();
 
 // Clerk webhook route
-app.use("/api/webhook", webhookRoutes);
+app.use("/api/user", userRouter);
 
 app.get("/", (req, res) => {
   res.send("API Working 🚀");
