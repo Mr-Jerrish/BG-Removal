@@ -5,16 +5,23 @@ import connectDB from "./configs/db.js";
 import userRouter from "./routes/userRoutes.js";
 
 dotenv.config();
-console.log("MONGO_URI:", process.env.MONGO_URI);
+
 const app = express();
+
 app.use(cors());
+
+// webhook needs raw body
 app.use("/api/user/webhook", express.raw({ type: "application/json" }));
+
+// other APIs
 app.use(express.json());
+
 connectDB();
 
 app.get("/", (req, res) => {
   res.send("BG Removal API Running 🚀");
 });
+
 app.use("/api/user", userRouter);
 
 const PORT = process.env.PORT || 5000;
