@@ -25,8 +25,8 @@ const Navbar = () => {
       {isSignedIn ? (
         <div className="flex items-center gap-3">
           <button className="flex items-center gap-2 bg-blue-100 px-3 sm:px-4 py-1 rounded-full">
-            <img src={assets.credit_icon} alt="credits" />
-            <p>{credit} Credits</p>
+            <img className="w-8 h-8" src={assets.credit_icon} alt="credits" />
+            <p>Credits : {credit}</p>
           </button>
 
           <UserButton />
