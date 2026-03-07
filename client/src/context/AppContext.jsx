@@ -1,14 +1,14 @@
-import { createContext } from "react";
+import { toast } from "react-toastify";
+import { createContext, useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import axios from "axios";
-import { useState } from "react";
-import { toast } from "react-toastify";
 export const AppContext = createContext();
 
-const AppContextProvider = (props) => {
+const AppContextProvider = ({ children }) => {
   const [credit, setCredit] = useState(0);
   const backendURL = import.meta.env.VITE_API_URL;
   const { getToken } = useAuth();
+
   const loadCreditsData = async () => {
     try {
       const token = await getToken();
@@ -24,14 +24,11 @@ const AppContextProvider = (props) => {
       toast.error(error.message);
     }
   };
-  const value = {
-    credit,
-    setCredit,
-    loadCreditsData,
-    backendURL,
-  };
+
   return (
-    <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
+    <AppContext.Provider value={{ credit, loadCreditsData }}>
+      {children}
+    </AppContext.Provider>
   );
 };
 

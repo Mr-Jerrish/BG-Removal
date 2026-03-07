@@ -2,24 +2,16 @@ import jwt from "jsonwebtoken";
 
 export const authUser = (req, res, next) => {
   try {
-    const { token } = req.headers;
+    const token = req.headers.token;
+    if (!token)
+      return res
+        .status(401)
+        .json({ success: false, message: "No token found" });
 
-    if (!token) {
-      return res.json({
-        success: false,
-        message: "No token found",
-      });
-    }
-
-    const token_decode = jwt.decode(token);
-
-    req.body.clerkId = token_decode.sub;
-
+    const decoded = jwt.decode(token);
+    req.body.clerkId = decoded.clerkId;
     next();
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    res.status(401).json({ success: false, message: error.message });
   }
 };

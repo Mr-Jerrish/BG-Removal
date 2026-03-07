@@ -4,9 +4,9 @@ const userSchema = new mongoose.Schema(
   {
     clerkId: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
-    photo: { type: String },
     firstName: { type: String },
     lastName: { type: String },
+    photo: { type: String },
     credit: { type: Number, default: 5 },
   },
   { timestamps: true },
