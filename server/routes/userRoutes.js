@@ -1,8 +1,15 @@
 import express from "express";
-import clerkWebhook from "../controllers/usercontroller.js";
+import { ClerkWebHooks, userCredits } from "../controllers/usercontroller.js";
+import { authUser } from "../middlewares/auth.js";
 
-const router = express.Router();
+const userRouter = express.Router();
+userRouter.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  ClerkWebHooks,
+);
+// userRouter.post("/webhook", ClerkWebHooks);
 
-router.post("/clerk", express.raw({ type: "application/json" }), clerkWebhook);
+userRouter.get("/credits", authUser, userCredits);
 
-export default router;
+export default userRouter;

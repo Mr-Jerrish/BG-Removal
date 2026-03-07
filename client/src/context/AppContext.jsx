@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
-  const [credit, setCredit] = useState(false);
+  const [credit, setCredit] = useState(0);
   const backendURL = import.meta.env.VITE_API_URL;
   const { getToken } = useAuth();
   const loadCreditsData = async () => {
