@@ -30,7 +30,7 @@ export const ClerkWebHooks = async (req, res) => {
       await userModel.findOneAndUpdate(
         { clerkId: data.id },
         {
-          email: data.email_addresses[0].email_address,
+          email: data.email_addresses?.[0]?.email_address,
           firstName: data.first_name,
           lastName: data.last_name,
           photo: data.image_url,
@@ -60,7 +60,7 @@ export const userCredits = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User not found" });
 
-    res.json({ success: true, credits: userData.credit });
+    res.json({ success: true, credits: userData.creditBalance });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
