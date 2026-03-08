@@ -41,7 +41,7 @@ const AppContextProvider = ({ children }) => {
       navigate("/result");
       const token = await getToken();
       const formData = new FormData();
-      image && formData.append("image", image);
+      formData.append("image", image);
       const { data } = await axios.post(
         backendURL + `/api/image/remove-bg`,
         formData,
@@ -70,7 +70,14 @@ const AppContextProvider = ({ children }) => {
 
   return (
     <AppContext.Provider
-      value={{ credit, loadCreditsData, image, setImage, removeBg }}
+      value={{
+        credit,
+        loadCreditsData,
+        image,
+        setImage,
+        removeBg,
+        resultImage,
+      }}
     >
       {children}
     </AppContext.Provider>
