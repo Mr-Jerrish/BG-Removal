@@ -53,8 +53,10 @@ export const ClerkWebHooks = async (req, res) => {
 
 export const userCredits = async (req, res) => {
   try {
-    const { clerkId } = req.body;
+    const clerkId = req.user.clerkId;
+
     const userData = await userModel.findOne({ clerkId });
+
     if (!userData)
       return res
         .status(404)
