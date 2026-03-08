@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./configs/db.js";
 import userRouter from "./routes/userRoutes.js";
+import imageRouter from "./routes/imageRoutes.js";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.use(cors());
 connectDB();
 app.use("/api/user", userRouter);
 app.use(express.json());
+app.use("/api/image", imageRouter);
 
 app.get("/", (req, res) => {
   res.send("BG Removal API Running 🚀");

@@ -28,6 +28,7 @@ const Navbar = () => {
             <img className="w-8 h-8" src={assets.credit_icon} alt="credits" />
             <p>Credits : {credit}</p>
           </button>
+          {/* <p className="text-gray-600 max-sm:hidden">Hi,{user.fullName}</p> */}
 
           <UserButton />
         </div>
@@ -45,33 +46,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// import React, { useEffect, useContext } from "react";
-// import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
-// import { AppContext } from "../context/AppContext";
-
-// const Navbar = () => {
-//   const { openSignIn } = useClerk();
-//   const { isSignedIn } = useUser();
-//   const { credit, loadCreditsData } = useContext(AppContext);
-
-//   useEffect(() => {
-//     if (isSignedIn) loadCreditsData();
-//   }, [isSignedIn]);
-
-//   return (
-//     <div className="flex justify-between p-4">
-//       <h1>BG Removal</h1>
-//       {isSignedIn ? (
-//         <div className="flex items-center gap-4">
-//           <p>Credits: {credit}</p>
-//           <UserButton />
-//         </div>
-//       ) : (
-//         <button onClick={() => openSignIn()}>Sign In</button>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Navbar;
