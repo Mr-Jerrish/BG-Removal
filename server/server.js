@@ -8,19 +8,15 @@ dotenv.config();
 
 const app = express();
 
-// Only JSON parser for normal routes
 app.use(cors());
 app.use(express.json());
 
-// Connect MongoDB
 connectDB();
 
-// Health check
 app.get("/", (req, res) => {
   res.send("BG Removal API Running 🚀");
 });
 
-// User routes
 app.use("/api/user", userRouter);
 
 const PORT = process.env.PORT || 5000;

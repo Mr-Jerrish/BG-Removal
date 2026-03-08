@@ -5,7 +5,7 @@ export const ClerkWebHooks = async (req, res) => {
   try {
     const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-    const payload = req.body.toString(); // must be string
+    const payload = req.body.toString();
     const evt = await webhook.verify(payload, {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
