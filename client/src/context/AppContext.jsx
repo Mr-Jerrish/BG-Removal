@@ -46,7 +46,10 @@ const AppContextProvider = ({ children }) => {
         backendURL + `/api/image/remove-bg`,
         formData,
         {
-          headers: { token },
+          headers: {
+            token: token,
+            "Content-Type": "multipart/form-data",
+          },
         },
       );
       if (data.success) {
