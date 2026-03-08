@@ -4,7 +4,7 @@ import { authUser } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.put(
+router.post(
   "/webhook",
   express.raw({ type: "application/json" }),
   ClerkWebHooks,
