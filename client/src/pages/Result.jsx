@@ -1,6 +1,7 @@
 import React from "react";
 import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
+import { useContext } from "react";
 const Result = () => {
   const { image, resultImage } = useContext(AppContext);
   return (
@@ -40,17 +41,20 @@ const Result = () => {
             </div>
           </div>
           {/*  */}
-          <div className="flex justify-center items-center sm:justify-end flex-wrap gap-4 mt-6">
-            <button className="px-8 py-2.5 text-violet-600 text-sm border border-violet-600 rounded-full hover:scale-105 transition-all duration-700">
-              Try another image
-            </button>
-            <a
-              className="px-8 py-2.5 text-white bg-gradient-to-r from-violet-600 to-fuchsia-500  rounded-full hover:scale-105 transition-all duration-700"
-              href={resultImage}
-            >
-              Download image
-            </a>
-          </div>
+          {resultImage && (
+            <div className="flex justify-center items-center sm:justify-end flex-wrap gap-4 mt-6">
+              <button className="px-8 py-2.5 text-violet-600 text-sm border border-violet-600 rounded-full hover:scale-105 transition-all duration-700">
+                Try another image
+              </button>
+              <a
+                className="px-8 py-2.5 text-white bg-gradient-to-r from-violet-600 to-fuchsia-500  rounded-full hover:scale-105 transition-all duration-700"
+                href={resultImage}
+                download="bg-removed.png"
+              >
+                Download image
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </>
